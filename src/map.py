@@ -22,19 +22,20 @@ class MapManager:
         self.player = player
         self.current_map = "niveau1"
 
-        self.register_map("niveau1")
+        self.register_map(self.current_map)
 
         self.teleport_player("player")
-        map_class = tmxlib.Map.open("niveau1.tmx")
-        self.chests = map_class.layers['chests']
-        self.chest_tiles = {817: 819, 818: 820, 823: 825, 824: 826}
+
+        self.chest_tiles = [819, 820, 825, 826]
         self.chest_list = [[[17, 1], [18, 1], [17, 2], [18, 2]],
                            [[1, 8], [2, 8], [1, 9], [2, 9]],
                            [[1, 17], [2, 17], [1, 18], [2, 18]]]
 
     def replace_chest(self, chest: int):
+        map_class = tmxlib.Map.open(f'../map/{self.current_map}.tmx')
+        chests_layer = map_class.layers['chests']
         for i in range(4):
-            self.chests[chest_list[0][i]]
+            chests_layer[chest_list[chest][i]] = self.chest_tiles[i]
 
     def check_collisions(self):
         for sprite in self.get_group().sprites():
