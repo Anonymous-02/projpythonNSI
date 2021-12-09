@@ -1,5 +1,9 @@
 from dataclasses import dataclass
-import pygame, pytmx, pyscroll
+
+import pygame
+import pyscroll
+import pytmx
+import tmxlib
 
 
 @dataclass
@@ -21,6 +25,16 @@ class MapManager:
         self.register_map("niveau1")
 
         self.teleport_player("player")
+        map_class = tmxlib.Map.open("niveau1.tmx")
+        self.chests = map_class.layers['chests']
+        self.chest_tiles = {817: 819, 818: 820, 823: 825, 824: 826}
+        self.chest_list = [[[17, 1], [18, 1], [17, 2], [18, 2]],
+                           [[1, 8], [2, 8], [1, 9], [2, 9]],
+                           [[1, 17], [2, 17], [1, 18], [2, 18]]]
+
+    def replace_chest(self, chest: int):
+        for i in range(4):
+            self.chests[chest_list[0][i]]
 
     def check_collisions(self):
         for sprite in self.get_group().sprites():
@@ -51,7 +65,7 @@ class MapManager:
         walls = []
 
         for obj in tmx_data.objects:
-            if obj.type == 'collision':
+            if obj.type == 'collision' or obj.type == 'wall' or obj.type == 'obstacle':
                 walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # dessiner groupe de calque
