@@ -165,7 +165,7 @@
   <object id="12" name="0" type="obstacle" x="48" y="80" width="32" height="32"/>
   <object id="13" name="1" type="obstacle" x="48" y="240" width="32" height="32"/>
   <object id="15" name="2" type="chest" x="24" y="280" width="16" height="16"/>
-  <object id="16" name="0" type="pnj" x="272.5" y="272" width="30.5" height="32.5"/>
+  <object id="16" name="0" type="pnj" x="272" y="288" width="32" height="16"/>
   <object id="17" name="2" type="obstacle" x="240" y="176" width="32" height="32"/>
   <object id="18" type="wall" x="304" y="0" width="16" height="304"/>
   <object id="19" type="wall" x="16" y="304" width="304" height="16"/>
