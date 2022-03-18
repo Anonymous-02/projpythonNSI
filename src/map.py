@@ -3,7 +3,6 @@ from dataclasses import dataclass
 import pygame
 import pyscroll
 import pytmx
-import tmxlib
 
 
 @dataclass
@@ -32,10 +31,10 @@ class MapManager:
                            [[1, 17], [2, 17], [1, 18], [2, 18]]]
 
     def replace_chest(self, chest: int):
-        map_class = tmxlib.Map.open(f'../map/{self.current_map}.tmx')
-        chests_layer = map_class.layers['chests']
+        map_class = maplib.Maptmx(f'../map/{self.current_map}.tmx')
+        chests_layer = map_class.layer(8)
         for i in range(4):
-            chests_layer[chest_list[chest][i]] = self.chest_tiles[i]
+            chests_layer.setTile(chest_list[chest][i], self.chest_tiles[i])
 
     def check_collisions(self):
         for sprite in self.get_group().sprites():
