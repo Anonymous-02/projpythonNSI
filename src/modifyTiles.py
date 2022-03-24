@@ -26,7 +26,6 @@ class Maptmx(object):
         self.infinite = ""
         self.nextlayerid = ""
         self.nextobjectid = ""
-        self.result = open("res.json","w+")
         if file is not None:
             self.load(file)
 
@@ -85,6 +84,7 @@ class Maptmx(object):
         self.nextlayerid = dic["@nextlayerid"]
         self.nextobjectid = dic["@nextobjectid"]
         self.objectgroup = dic["objectgroup"]
+
         self.orientation = dic["@orientation"]
         self.renderorder = dic['@renderorder']
         self.tiledversion = dic['@tiledversion']
@@ -99,7 +99,6 @@ class Maptmx(object):
         file = open(path, "r")
         dico = xmltodict.parse(file.read())["map"]
         lay = dico["layer"]
-        self.result.write(json.dumps(lay))
         lay2 = []
         for i in range(len(lay)):
             lay2 += [{}]
