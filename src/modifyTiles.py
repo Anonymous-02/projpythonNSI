@@ -43,21 +43,25 @@ class Maptmx(object):
             file.write(f'\n\t\t<data encoding="{i.encoding}">')
             txt = ""
             for j in i.grid:
-                txt += "\n\t\t\t"
+                txt += "\n"
                 for k in j:
-                    txt += k + ","
+                    txt += str(k) + ","
             file.write(txt[:-1])
             file.write("\n\t\t</data>\n\t</layer>")
         a = self.objectgroup
         file.write(f'\n\t<objectgroup id="{a["id"]}" name="{a["name"]}">')
         for i in a["object"]:
-            if i["type"] != 'player':
-                file.write(f'\n\t\t<object id="{i["id"]}" type="{i["type"]}" x="{i["x"]}" y="{i["y"]}"'
+            if i["type"] == 'obstacle' or i['type'] == "pnj" or i['type'] == "chest":
+                file.write(f'\n\t\t<object id="{i["id"]}" name="{i["name"]}" type="{i["type"]}" x="{i["x"]}" y="{i["y"]}"'
                            f' width="{i["width"]}" height="{i["height"]}"/>')
-            else:
+            elif i["type"] == 'player':
                 file.write(f'\n\t\t<object id="{i["id"]}" name="{i["name"]}" type="{i["type"]}" x="{i["x"]}"'
                            f' y="{i["y"]}">\n\t\t\t<point/>\n\t\t</object>')
+            else:
+                file.write(f'\n\t\t<object id="{i["id"]}" type="{i["type"]}" x="{i["x"]}" y="{i["y"]}"'
+                           f' width="{i["width"]}" height="{i["height"]}"/>')
         file.write("\n\t</objectgroup>\n</map>")
+        file.close()
 
     def autosave(self):
         self.save(self.path)
@@ -84,7 +88,6 @@ class Maptmx(object):
         self.nextlayerid = dic["@nextlayerid"]
         self.nextobjectid = dic["@nextobjectid"]
         self.objectgroup = dic["objectgroup"]
-
         self.orientation = dic["@orientation"]
         self.renderorder = dic['@renderorder']
         self.tiledversion = dic['@tiledversion']
@@ -122,7 +125,6 @@ class Maptmx(object):
                     obj2['object'] += [{}]
                     for k in obj[i][j]:
                         obj2[i][j][k[1:]] = obj[i][j][k]
-
         tls = dico["tileset"]
         tls2 = []
         for i in rlen(tls):
@@ -157,11 +159,8 @@ class MapLayer(object):
             x = x[0]
         return self.grid[x][y]
 
-    def setTile(self, x=0, y=0, value=None):
-        if type(x) == list:
-            y = x[1]
-            x = x[0]
+    def setTile(self, value=None, coord=(0, 0)):
         if value is None:
-            value = self.grid[x][y]
-        print(f"the tile at {x}:{y} got set to {value}")
-        self.grid[x][y] = value
+            value = self.grid[coord[1]][coord[0]]
+        print(f"the tile at {coord[0]}:{coord[1]} got set to {value}")
+        self.grid[coord[1]][coord[0]] = value

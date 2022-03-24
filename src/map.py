@@ -29,19 +29,20 @@ class MapManager:
         self.teleport_player("player")
 
         self.is_replaced = [False, False, False]
-        self.chest_tiles = [819, 820, 825, 826]
-        self.chest_list = [[[17, 1], [18, 1], [17, 2], [18, 2]],
-                           [[1, 8], [2, 8], [1, 9], [2, 9]],
-                           [[1, 17], [2, 17], [1, 18], [2, 18]]]
+        self.chest_tiles = (819, 825, 820, 826)
+        self.chest_list = (((17, 1), (17, 2), (18, 1), (18, 2)),
+                           ((1, 8), (2, 8), (1, 9), (2, 9)),
+                           ((1, 17), (2, 17), (1, 18), (2, 18)))
 
     def replace_chest(self, chest: int):
         if not self.is_replaced[chest]:
             map_class = maplib.Maptmx(f'../map/{self.current_map}.tmx')
             chests_layer = map_class.layer(8)
             for i in range(4):
-                chests_layer.setTile(self.chest_list[chest][i], self.chest_tiles[i])
+                chests_layer.setTile(self.chest_tiles[i], self.chest_list[chest][i])
             map_class.autosave()
             self.is_replaced[chest] = True
+            self.register_map(self.current_map)
 
     def check_collisions(self):
         for sprite in self.get_group().sprites():

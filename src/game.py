@@ -37,7 +37,6 @@ class Game:
         self.map_manager.update()
 
     def run(self):
-
         clock = pygame.time.Clock()
 
         # boucle maintient fenêtre ouverte
@@ -54,6 +53,9 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                    # réinitialiser la map
+                    file = open(f"../map/{self.map_manager.current_map}.tmx", "w")
+                    file.write(open(f"../map/originales/{self.map_manager.current_map}.tmx", "r").read())
 
             clock.tick(60)  # FPS
 
