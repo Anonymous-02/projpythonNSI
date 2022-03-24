@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import pygame
 import pyscroll
 import pytmx
+import modifyTiles as maplib
 
 
 @dataclass
@@ -27,17 +28,20 @@ class MapManager:
 
         self.teleport_player("player")
 
+        self.is_replaced = [False, False, False]
         self.chest_tiles = [819, 820, 825, 826]
         self.chest_list = [[[17, 1], [18, 1], [17, 2], [18, 2]],
                            [[1, 8], [2, 8], [1, 9], [2, 9]],
                            [[1, 17], [2, 17], [1, 18], [2, 18]]]
 
     def replace_chest(self, chest: int):
-        map_class = maplib.Maptmx(f'../map/{self.current_map}.tmx')
-        chests_layer = map_class.layer(8)
-        for i in range(4):
-            chests_layer.setTile(chest_list[chest][i], self.chest_tiles[i])
-        map_class.autosave()
+        if not self.is_replaced[chest]:
+            map_class = maplib.Maptmx(f'../map/{self.current_map}.tmx')
+            chests_layer = map_class.layer(8)
+            for i in range(4):
+                chests_layer.setTile(self.chest_list[chest][i], self.chest_tiles[i])
+            map_class.autosave()
+            self.is_replaced[chest] = True
 
     def check_collisions(self):
         for sprite in self.get_group().sprites():
@@ -48,11 +52,10 @@ class MapManager:
                 else:
                     sprite.speed = 1'''
 
-            if sprite.feet.collidelist(self.get_walls()) > -1:
+            if sprite.feet.collidelist(self.get_walls()) > -1 or sprite.feet.collidelist(self.get_obstacles()) !=-1:
                 sprite.move_back()
             a = sprite.feet.collidelist(self.get_chest())
             if a > -1:
-                print(a)
                 self.replace_chest(a)
 
     def teleport_player(self, name):
@@ -70,23 +73,23 @@ class MapManager:
 
         # définir une liste qui va stocker les rectangles de collision
         walls = []
-        obstacles = {}
-        chests = {}
+        obstacles = [pygame.Rect(0, 0, 0, 0)] * 3
+        chests = [pygame.Rect(0, 0, 0, 0)] * 3
 
         for obj in tmx_data.objects:
             if obj.type == 'collision' or obj.type == 'wall':
                 walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
             if obj.type == 'chest':
-                chests[obj.name] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
+                chests[int(obj.name)] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
             if obj.type == 'obstacle':
-                obstacles[obj.name] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
+                obstacles[int(obj.name)] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
 
         # dessiner groupe de calque
         group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=5)
         group.add(self.player)
 
         # Enregistrer la nouvelle carte chargée
-        self.maps[name] = Map(name, walls, list(obstacles), list(chests), group, tmx_data)
+        self.maps[name] = Map(name, walls, obstacles, chests, group, tmx_data)
 
     def get_map(self):
         return self.maps[self.current_map]

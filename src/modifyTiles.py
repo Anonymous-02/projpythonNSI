@@ -26,6 +26,7 @@ class Maptmx(object):
         self.infinite = ""
         self.nextlayerid = ""
         self.nextobjectid = ""
+        self.result = open("res.json","w+")
         if file is not None:
             self.load(file)
 
@@ -66,12 +67,12 @@ class Maptmx(object):
         if type(pos) == int:
             for i in self.layers:
                 if pos == i.id:
-                    print(f"layer {i.name} at pos {i.id} of size {i.size['height']}x{i.size['width']}")
+                    # print(f"layer {i.name} at pos {i.id} of size {i.size['height']}x{i.size['width']}")
                     return i
         elif type(pos) == str:
             for i in self.layers:
                 if pos == i.name:
-                    print(f"layer {i.name} at pos {i.id} of size {i.size['height']}x{i.size['width']}")
+                    # print(f"layer {i.name} at pos {i.id} of size {i.size['height']}x{i.size['width']}")
                     return i
         print("this layer doesn't exist")
 
@@ -98,29 +99,31 @@ class Maptmx(object):
         file = open(path, "r")
         dico = xmltodict.parse(file.read())["map"]
         lay = dico["layer"]
+        self.result.write(json.dumps(lay))
         lay2 = []
-        for i in rlen(lay):
-            lay2.append({})
-            for j in lay[i].keys():
-                if j == "data":
-                    lay2[i]["data"] = {}
-                    for k in lay[i][j].keys():
-                        lay2[i][j][k[1:]] = lay[i][j][k]
-                elif j[0] == "@":
+        for i in range(len(lay)):
+            lay2 += [{}]
+            for j in lay[i]:
+                if j[0] == "@":
                     lay2[i][j[1:]] = lay[i][j]
+                elif j == "data":
+                    lay2[i]["data"] = {}
+                    for k in lay[i]["data"]:
+                        lay2[i]["data"][k[1:]] = lay[i]["data"][k]
                 else:
                     lay2[i][j] = lay[i][j]
         obj = dico["objectgroup"]
         obj2 = {}
-        for i in obj.keys():
+        for i in obj:
             if i[0] == "@":
                 obj2[i[1:]] = obj[i]
             else:
                 obj2['object'] = []
-                for j in range(len(obj["object"]) - 1):
-                    obj2['object'].append({})
-                    for k in obj[i][j].keys():
+                for j in rlen(obj["object"]):
+                    obj2['object'] += [{}]
+                    for k in obj[i][j]:
                         obj2[i][j][k[1:]] = obj[i][j][k]
+
         tls = dico["tileset"]
         tls2 = []
         for i in rlen(tls):
@@ -153,10 +156,12 @@ class MapLayer(object):
         if type(x) == list:
             y = x[1]
             x = x[0]
-        print(f"tile at {x}:{y} value : {self.grid[x][y]}")
         return self.grid[x][y]
 
     def setTile(self, x=0, y=0, value=None):
+        if type(x) == list:
+            y = x[1]
+            x = x[0]
         if value is None:
             value = self.grid[x][y]
         print(f"the tile at {x}:{y} got set to {value}")

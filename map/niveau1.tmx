@@ -10,7 +10,7 @@
 201,312,313,314,313,314,313,314,313,314,313,314,313,314,313,314,365,165,166,202,
 161,352,353,354,353,354,353,354,353,354,353,354,353,354,353,354,365,205,206,162,
 201,392,393,394,393,394,393,394,393,394,393,394,393,394,393,394,365,165,166,202,
-161,403,404,403,404,403,404,403,404,403,404,403,404,403,404,403,404,205,206,162,
+161,403,404,403,404,403,404,403,404,403,404,403,404,403,404,403,1133,205,206,162,
 201,165,166,165,166,165,166,165,166,165,166,165,166,165,166,165,166,165,166,202,
 161,205,206,205,206,205,206,205,206,205,206,205,206,205,206,205,206,205,206,162,
 201,165,166,282,283,284,283,284,285,165,166,282,283,284,283,284,283,284,283,202,
@@ -160,13 +160,13 @@
   <object id="9" name="player" type="player" x="143" y="110">
    <point/>
   </object>
-  <object id="10" name="0" type="chest" x="280" y="24" width="16" height="16"/>
-  <object id="11" name="1" type="chest" x="24" y="136" width="16" height="16"/>
-  <object id="12" name="0" type="obstacle" x="48" y="80" width="32" height="32"/>
-  <object id="13" name="1" type="obstacle" x="48" y="240" width="32" height="32"/>
-  <object id="15" name="2" type="chest" x="24" y="280" width="16" height="16"/>
-  <object id="16" name="0" type="pnj" x="272" y="288" width="32" height="16"/>
-  <object id="17" name="2" type="obstacle" x="240" y="176" width="32" height="32"/>
+  <object id="10" type="chest" x="280" y="24" width="16" height="16"/>
+  <object id="11" type="chest" x="24" y="136" width="16" height="16"/>
+  <object id="12" type="obstacle" x="48" y="80" width="32" height="32"/>
+  <object id="13" type="obstacle" x="48" y="240" width="32" height="32"/>
+  <object id="15" type="chest" x="24" y="280" width="16" height="16"/>
+  <object id="16" type="pnj" x="272" y="288" width="32" height="16"/>
+  <object id="17" type="obstacle" x="240" y="176" width="32" height="32"/>
   <object id="18" type="wall" x="304" y="0" width="16" height="304"/>
   <object id="19" type="wall" x="16" y="304" width="304" height="16"/>
   <object id="20" type="wall" x="0" y="16" width="16" height="304"/>
